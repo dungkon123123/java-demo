@@ -1,20 +1,24 @@
-pipeline {
-    agent any
-    stages {
+node {
+    try {
+        stage('Checkout') {
+            // Lấy mã nguồn từ repository
+            git url: 'https://github.com/dungkon123123/java-demo', branch: 'master'
+        }
         stage('Build') {
-            steps {
-                sh 'mvn clean install'
-            }
+            // Xây dựng dự án
+            sh 'mvn clean install'
         }
         stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
+            // Chạy test
+            sh 'mvn test'
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying artifact...'
-            }
-        }
+    } catch (err) {
+        echo "Build lỗi: ${err}"
+        // Dừng pipeline nếu gặp lỗi
+        currentBuild.result = 'FAILURE'
+        throw err
+    } finally {
+        // Hành động báo cáo chung
+        echo 'Hoàn thành pipeline'
     }
 }
