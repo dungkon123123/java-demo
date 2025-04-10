@@ -6,11 +6,11 @@ node {
         }
         stage('Build') {
             // Xây dựng dự án
-            sh 'mvn clean install'
+            bat 'mvn clean install'
         }
         stage('Test') {
             // Chạy test
-            sh 'mvn test'
+            bat 'mvn test'
         }
     } catch (err) {
         echo "Build lỗi: ${err}"
